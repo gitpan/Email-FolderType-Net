@@ -1,9 +1,9 @@
 package Email::FolderType::Net;
-# $Id: Net.pm,v 1.1 2004/08/07 19:06:19 cwest Exp $
+# $Id: Net.pm,v 1.2 2004/08/14 16:52:19 cwest Exp $
 use strict;
 
 use vars qw[$VERSION];
-$VERSION = sprintf "%d.%02d", split m/\./, (qw$Revision: 1.1 $)[1];
+$VERSION = sprintf "%d.%02d", split m/\./, (qw$Revision: 1.2 $)[1];
 
 use Email::FolderType::Register qw[register_type];
 use URI;
@@ -22,7 +22,7 @@ Email::FolderType::Net - Recognize folder types for network based message protoc
 =head2 DESCRIPTION
 
 Registers several mail folder types that are known as network based
-messaging protocols. Folder names for these protocols shoudl be
+messaging protocols. Folder names for these protocols should be
 specified using a L<URI|URI> syntax.
 
 =head2 IMAP
