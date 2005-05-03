@@ -1,11 +1,10 @@
 package Email::FolderType::Net;
-# $Id: Net.pm,v 1.2 2004/08/14 16:52:19 cwest Exp $
+# $Id: Net.pm,v 1.3 2005/05/03 01:46:40 cwest Exp $
 use strict;
 
 use vars qw[$VERSION];
-$VERSION = sprintf "%d.%02d", split m/\./, (qw$Revision: 1.2 $)[1];
+$VERSION = sprintf "%d.%02d", split m/\./, (qw$Revision: 1.3 $)[1];
 
-use Email::FolderType::Register qw[register_type];
 use URI;
 
 =head1 NAME
@@ -51,19 +50,31 @@ returns this folder type if the scheme is C<pops> or C<pop3s>.
 
 =cut
 
-register_type IMAP  => sub { _from_scheme(imap  => shift) };
-register_type IMAPS => sub { _from_scheme(imaps => shift) };
-register_type POP3  => sub { _from_scheme('pop' => shift) };
-register_type POP3  => sub { _from_scheme(pop3  => shift) };
-register_type POP3S => sub { _from_scheme(pops  => shift) };
-register_type POP3S => sub { _from_scheme(pop3s => shift) };
-
 sub _from_scheme {
     my $scheme = shift;
     my $uri    = URI->new(shift);
     return 1 if lc($uri->scheme) eq $scheme;
     return;
 }
+
+sub _create_match {
+    my (@schemes) = @_;
+    return sub {
+        Email::FolderType::Net::_from_scheme($_,@_)
+          and return(1)
+            for @schemes;
+        return;
+    };
+}
+
+package Email::FolderType::IMAP;
+*match = Email::FolderType::Net::_create_match(qw[imap]);
+package Email::FolderType::IMAPS;
+*match = Email::FolderType::Net::_create_match(qw[imaps]);
+package Email::FolderType::POP3;
+*match = Email::FolderType::Net::_create_match(qw[pop pop3]);
+package Email::FolderType::POP3S;
+*match = Email::FolderType::Net::_create_match(qw[pops pop3s]);
 
 __END__
 
