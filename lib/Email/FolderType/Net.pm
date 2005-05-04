@@ -1,9 +1,9 @@
 package Email::FolderType::Net;
-# $Id: Net.pm,v 1.3 2005/05/03 01:46:40 cwest Exp $
+# $Id: Net.pm,v 1.4 2005/05/04 02:13:08 cwest Exp $
 use strict;
 
 use vars qw[$VERSION];
-$VERSION = sprintf "%d.%02d", split m/\./, (qw$Revision: 1.3 $)[1];
+$VERSION = '1.04';
 
 use URI;
 
