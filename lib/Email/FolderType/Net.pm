@@ -1,15 +1,63 @@
-package Email::FolderType::Net;
-# $Id: Net.pm,v 1.4 2005/05/04 02:13:08 cwest Exp $
 use strict;
+use warnings;
+package Email::FolderType::Net;
+{
+  $Email::FolderType::Net::VERSION = '1.042';
+}
+# ABSTRACT: Recognize folder types for network based message protocols.
 
-use vars qw[$VERSION];
-$VERSION = '1.041';
+use URI 1.35;
 
-use URI;
+
+sub _from_scheme {
+    my $scheme = shift;
+    my $uri    = URI->new(shift);
+    return 1 if lc($uri->scheme) eq $scheme;
+    return;
+}
+
+sub _create_match {
+    my (@schemes) = @_;
+    return sub {
+        Email::FolderType::Net::_from_scheme($_,@_)
+          and return(1)
+            for @schemes;
+        return;
+    };
+}
+
+package Email::FolderType::IMAP;
+{
+  $Email::FolderType::IMAP::VERSION = '1.042';
+}
+*match = Email::FolderType::Net::_create_match(qw[imap]);
+package Email::FolderType::IMAPS;
+{
+  $Email::FolderType::IMAPS::VERSION = '1.042';
+}
+*match = Email::FolderType::Net::_create_match(qw[imaps]);
+package Email::FolderType::POP3;
+{
+  $Email::FolderType::POP3::VERSION = '1.042';
+}
+*match = Email::FolderType::Net::_create_match(qw[pop pop3]);
+package Email::FolderType::POP3S;
+{
+  $Email::FolderType::POP3S::VERSION = '1.042';
+}
+*match = Email::FolderType::Net::_create_match(qw[pops pop3s]);
+
+__END__
+
+=pod
 
 =head1 NAME
 
 Email::FolderType::Net - Recognize folder types for network based message protocols.
+
+=head1 VERSION
+
+version 1.042
 
 =head1 SYNOPSIS
 
@@ -48,56 +96,21 @@ Returns this folder type if the schem is C<pop> or C<pop3>.
 
 returns this folder type if the scheme is C<pops> or C<pop3s>.
 
-=cut
-
-sub _from_scheme {
-    my $scheme = shift;
-    my $uri    = URI->new(shift);
-    return 1 if lc($uri->scheme) eq $scheme;
-    return;
-}
-
-sub _create_match {
-    my (@schemes) = @_;
-    return sub {
-        Email::FolderType::Net::_from_scheme($_,@_)
-          and return(1)
-            for @schemes;
-        return;
-    };
-}
-
-package Email::FolderType::IMAP;
-*match = Email::FolderType::Net::_create_match(qw[imap]);
-package Email::FolderType::IMAPS;
-*match = Email::FolderType::Net::_create_match(qw[imaps]);
-package Email::FolderType::POP3;
-*match = Email::FolderType::Net::_create_match(qw[pop pop3]);
-package Email::FolderType::POP3S;
-*match = Email::FolderType::Net::_create_match(qw[pops pop3s]);
-
-__END__
-
 =head1 SEE ALSO
 
 L<Email::FolderType>,
 L<Email::FolderType::Local>,
 L<URI>.
 
-=head1 PERL EMAIL PROJECT
-
-This module is maintained by the Perl Email Project
-
-L<http://emailproject.perl.org/wiki/Email::FolderType::Net>
-
 =head1 AUTHOR
 
-Casey West <F<casey@geeknest.com>>.
+Casey West <casey@geeknest.com>
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
-  Copyright (c) 2004 Casey West.  All rights reserved.
-  This module is free software; you can redistribute it and/or modify it
-  under the same terms as Perl itself.
+This software is copyright (c) 2004 by Casey West <casey@geeknest.com>.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
