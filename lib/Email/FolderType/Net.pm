@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Email::FolderType::Net;
 {
-  $Email::FolderType::Net::VERSION = '1.042';
+  $Email::FolderType::Net::VERSION = '1.043';
 }
 # ABSTRACT: Recognize folder types for network based message protocols.
 
@@ -12,6 +12,7 @@ use URI 1.35;
 sub _from_scheme {
     my $scheme = shift;
     my $uri    = URI->new(shift);
+    return unless $uri->scheme;
     return 1 if lc($uri->scheme) eq $scheme;
     return;
 }
@@ -28,22 +29,22 @@ sub _create_match {
 
 package Email::FolderType::IMAP;
 {
-  $Email::FolderType::IMAP::VERSION = '1.042';
+  $Email::FolderType::IMAP::VERSION = '1.043';
 }
 *match = Email::FolderType::Net::_create_match(qw[imap]);
 package Email::FolderType::IMAPS;
 {
-  $Email::FolderType::IMAPS::VERSION = '1.042';
+  $Email::FolderType::IMAPS::VERSION = '1.043';
 }
 *match = Email::FolderType::Net::_create_match(qw[imaps]);
 package Email::FolderType::POP3;
 {
-  $Email::FolderType::POP3::VERSION = '1.042';
+  $Email::FolderType::POP3::VERSION = '1.043';
 }
 *match = Email::FolderType::Net::_create_match(qw[pop pop3]);
 package Email::FolderType::POP3S;
 {
-  $Email::FolderType::POP3S::VERSION = '1.042';
+  $Email::FolderType::POP3S::VERSION = '1.043';
 }
 *match = Email::FolderType::Net::_create_match(qw[pops pop3s]);
 
@@ -57,7 +58,7 @@ Email::FolderType::Net - Recognize folder types for network based message protoc
 
 =head1 VERSION
 
-version 1.042
+version 1.043
 
 =head1 SYNOPSIS
 
